@@ -9,3 +9,5 @@ steps:
       app_location: projects/docusaurus-example
       app_build_command: npm run build
       output_location: build
+    env:
+      azure_static_web_apps_api_token: $(swa_deployment_token)
