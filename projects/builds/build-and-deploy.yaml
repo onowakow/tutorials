@@ -1,0 +1,11 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: AzureStaticWebApp@0
+    inputs:
+      app_location: projects/docusaurus-example
+      app_build_command: npm run build
+      output_location: build
