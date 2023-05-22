@@ -1,4 +1,4 @@
-# Deploy Docusaurus to Azure Static Web Apps using Azure DevOps
+# Deploy Docusaurus to Azure Static Web App using Azure DevOps Pipelines (YAML)
 
 Documentation is an necessary element of most projects. Facebook's open source project, [Docusaurus](https://docusaurus.io/docs), makes creating beautiful and clean documentation easy. We will deploy the docs using Azure Static Web Apps with an automatic deployment when changes are pushed to the Github repo.
 
@@ -17,7 +17,7 @@ We will begin by creating a Docusaurus app. Official documentation for this step
    ```
 
    If all goes well, you should see an output similar to the following:
-   ![Successful run of create-docusaurus begins with [Success] Created docusaurus-example](./media/create-docusaurus-output.png)
+   ![Successful run of create-Docusaurus begins with [Success] Created docusaurus-example](./media/create-docusaurus-output.png)
 
 3. Serve the project locally. Run the `start` script to serve the docs to the default url of http://localhost:3000. You will need to navigate to the folder titled `docusaurus-example` before running the start script.
 
@@ -42,7 +42,7 @@ Docusaurus can be deployed from a variety of cloud repos like Github. This tutor
 
    ![New DevOps repo shows an empty repo, a repo link, and a button labeled Generate Git Credentials](./media/azure-devops-new-repo.png)
 
-3. Initialize an new git repo in the parent folder of your docusaurus project. For example, if your docusaurus project is at /documents/docs-project/docusaurus-example, initialize the repository in docs-project. This will help us later when we add a builds folder to house the pipeline files.
+3. Initialize an new git repo in the parent folder of your Docusaurus project. For example, if your Docusaurus project is at /documents/docs-project/docusaurus-example, initialize the repository in docs-project. This will help us later when we add a builds folder to house the pipeline files.
 
    **a**. Initialize a repo and add your Docusaurus files:
 
@@ -54,7 +54,7 @@ Docusaurus can be deployed from a variety of cloud repos like Github. This tutor
    **b**. Make your initial commit:
 
    ```
-   git commit -m "Create new docusaurus project"
+   git commit -m "Create new Docusaurus project"
    ```
 
    **c**. Rename the default branch from "master" to "main". This step is not necessary, but some developers prefer it
@@ -126,9 +126,9 @@ Docusaurus can be deployed from a variety of cloud repos like Github. This tutor
 
 We will write a simple pipeline using YAML, and import the YAML into Azure DevOps. Do not worry if you are unfamiliar with YAML. You will see that YAML is fairly easy to work with.
 
-1. In your docusaurus parent folder, create a folder called `builds`. Your repo should now have two folders: one for the Docusaurus project (perhaps called 'docusaurus-example') and one for builds called 'builds'.
+1. In your Docusaurus parent folder, create a folder called `builds`. Your repo should now have two folders: one for the Docusaurus project (perhaps called 'docusaurus-example') and one for builds called 'builds'.
 
-2. Create a file called `build-and-deploy.yaml`. The name can be whatever suits your project. The code will be followed by an explanation of the fields.
+2. Create a file called `build-and-deploy.yaml`. The name can be whatever suits your project. The code will be followed by an explanation of the fields. Be sure to commit these changes and push them to your Azure DevOps repo.
 
    In `build-and-deploy.yaml`, add the following code, making changes to suit your project:
 
@@ -144,6 +144,8 @@ We will write a simple pipeline using YAML, and import the YAML into Azure DevOp
          app_location: docusaurus-example
          app_build_command: npm run build
          output_location: build
+       env:
+         azure_static_web_apps_api_token: $(swa_deployment_token)
    ```
 
    **trigger**: For now, we will manually trigger the pipeline. We could also trigger the pipeline automatically (continuous integration style) like the following code block:
@@ -166,8 +168,43 @@ We will write a simple pipeline using YAML, and import the YAML into Azure DevOp
 
    **output_location**: `output_location` is relative to the `app_location` and not to the root. By default, Docusaurus will build to the `build` folder.
 
+   **env: azure_static_web_apps_api_token**: This field name must be exactly as shown. This will load an environmental variable into the pipeline to allow the code to be uploaded to the static web app. **Do not store the static web app deployment token in the code. We will load it later in the DevOps platform.**
+
    Also see: [AzureStaticWebApp@0 Task Docs](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/azure-static-web-app-v0?view=azure-pipelines)
 
-Return to Azure DevOps and click on the Repos icon. We will use
+## Set up a Build in DevOps
 
-Select Use the classic
+DevOps allows us to set up a build for a repo. There are a number of ways to create a pipeline, but this method allows us to use our premade YAML.
+
+1. Go to Azure DevOps and click on the Repos icon. At the top of your repo, there should be a "Set up Build" button as shown below. Click the Set up Build button.
+
+   ![DevOps shows set up build button when viewing repo](./media/devops-set-up-build.png)
+
+2. Select the option to use preexisting YAML.
+   ![Create build options include Existing Azure Pipelines YAML File](./media/devops-use-existing-pipeline.png)
+
+3. Find the YAML file that we created and select it for the new build.
+
+   ![Selecting an existing YAML file by selecting the file from the repo](./media/devops-select-yaml.png)
+
+4. Add the deployment token as an environment variable. This value can be found in the Azure Portal as explained earlier in this tutorial. The variable name `swa_deployment_token` corresponds to the variable in the YAML. In the New Variable form, add a variable with the name `swa_deployment_token` with the value being the deployment token found in your static web app in the Azure Portal. Select **Keep this value secret**.
+
+   ![Azure DevOps has a variables button to add variables to a pipeline](./media/devops-select-variables.png)
+
+   ![Form shows a key and value for adding a variable](./media/devops-add-deployment-token.png)
+
+5. Make sure that your DevOps repo has the most recent Docusaurus changes and run the pipeline. For future runs, you can find your new pipeline in the Pipelines tab. You can manually run the pipeline from here, or set up a trigger in the YAML to run the pipeline when changes are pushed to the repo.
+
+   You can also check the status of the pipeline in the Pipelines tab.
+
+## Success!
+
+If all went well, when you visit your static web app, you should see the Docusaurus app.
+
+![Deployed Docusaurus app is being served from the static web app url](./media/docusaurus-successful-build.png)
+
+## Discussion
+
+- Docusaurus can be customized to be primarily a blog rather than docs
+
+- The above process can be applied to most websites including other Single Page Applications (SPAs) like React or Angular.
