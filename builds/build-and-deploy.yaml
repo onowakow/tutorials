@@ -6,7 +6,7 @@ pool:
 steps:
   - task: AzureStaticWebApp@0
     inputs:
-      app_location: projects/docusaurus-example
+      app_location: docusaur
       app_build_command: npm run build
       output_location: build
     env:
