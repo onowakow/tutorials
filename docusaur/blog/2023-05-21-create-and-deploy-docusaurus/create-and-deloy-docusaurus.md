@@ -212,6 +212,10 @@ If all went well, when you visit your static web app, you should see the Docusau
 
 ![Deployed Docusaurus app is being served from the static web app url](./media/docusaurus-successful-build.png)
 
+## Adding Custom Domain with NameCheap
+
+Adding a custom domain can be done using a variety of domain providers. This Microsoft video, [How to set up a custom domain name in Azure Static Web Apps](https://www.youtube.com/watch?v=SpQgKfJ87fE&t=70s), provides a thorough tutorial for accomplishing this. They use [NameCheap](https://www.namecheap.com/) for the tutorial, and I would recommend doing the same. Other providers like Google or GoDaddy may have additional steps.
+
 ## Discussion
 
 - Docusaurus can be customized to be primarily a blog rather than docs
