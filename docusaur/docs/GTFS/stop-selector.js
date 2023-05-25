@@ -10,9 +10,17 @@ export const StopSelector = ({ stops, selectedStopId, setSelectedStopId }) => {
     setSelectedStopId(stopId);
   };
 
+  const clearSelectedStop = () => {
+    setSelectedStopId('');
+  };
+
   return (
-    <>
-      <select defaultValue="" onChange={handleStopSelect}>
+    <div style={{ marginBottom: '.5rem' }}>
+      <select
+        value={selectedStopId}
+        // defaultValue=""
+        onChange={handleStopSelect}
+      >
         <option value="" disabled>
           Select a stop
         </option>
@@ -22,6 +30,9 @@ export const StopSelector = ({ stops, selectedStopId, setSelectedStopId }) => {
           </option>
         ))}
       </select>
-    </>
+      <button onClick={clearSelectedStop} style={{ marginLeft: '.5rem' }}>
+        Clear Selection
+      </button>
+    </div>
   );
 };

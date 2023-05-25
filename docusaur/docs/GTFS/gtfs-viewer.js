@@ -9,7 +9,7 @@ export const GTFSViewer = () => {
   const [stopTimes, setStopTimes] = useState([]);
   const [trips, setTrips] = useState([]);
 
-  const [selectedStopId, setSelectedStopId] = useState(null);
+  const [selectedStopId, setSelectedStopId] = useState('');
 
   const fileStateMap = [
     {
@@ -43,7 +43,11 @@ export const GTFSViewer = () => {
         <>
           <h2>View Times by Stop</h2>
           <p>Select a stop to view the scheduled leave times.</p>
-          <StopSelector stops={stops} setSelectedStopId={setSelectedStopId} />
+          <StopSelector
+            stops={stops}
+            selectedStopId={selectedStopId}
+            setSelectedStopId={setSelectedStopId}
+          />
 
           {selectedStopId ? (
             <TimesByStop
