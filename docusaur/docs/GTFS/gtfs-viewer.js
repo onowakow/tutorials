@@ -1,77 +1,104 @@
-import React, { useState } from 'react';
-import { FileUpload } from './file-upload';
+import React, { useEffect, useState } from 'react';
 import { TimesByStop } from './times-by-stop';
 import { StopSelector } from './stop-selector';
 
-export const GTFSViewer = () => {
-  const [routes, setRoutes] = useState([]);
-  const [stops, setStops] = useState([]);
-  const [stopTimes, setStopTimes] = useState([]);
-  const [trips, setTrips] = useState([]);
-
+export const GTFSViewer = ({ stops, routes, trips, stopTimes }) => {
+  // When state changes, what is re-evaluated?
   const [selectedStopId, setSelectedStopId] = useState('');
+  const [informationRichStopTimes, setInformationRichStopTimes] = useState([]);
 
-  const fileStateMap = [
-    {
-      name: 'stop_times.txt',
-      state: stopTimes,
-      setState: setStopTimes,
-    },
-    {
-      name: 'routes.txt',
-      state: routes,
-      setState: setRoutes,
-    },
-    {
-      name: 'stops.txt',
-      state: stops,
-      setState: setStops,
-    },
-    {
-      name: 'trips.txt',
-      state: trips,
-      setState: setTrips,
-    },
-  ];
+  useEffect(() => {
+    const informationRichStopTimes = stopTimes.map((stopTime) => {
+      const {
+        trip_id,
+        departure_time,
+        pickup_type,
+        stop_id,
+        drop_off_type,
+        timepoint,
+      } = stopTime;
+
+      const pickupTypeDescription =
+        pickup_type == 3
+          ? 'Notify driver for pickup'
+          : pickup_type == 1
+          ? 'No pickup'
+          : 'Normal pickup';
+
+      const dropOffTypeDescription =
+        drop_off_type == 3
+          ? 'Notify driver for drop off'
+          : drop_off_type == 1
+          ? 'No drop off'
+          : 'Normal drop off';
+
+      const timepointDescription = timepoint == 0 ? 'Approximate' : 'Strict';
+
+      const trip = trips.find((trip) => trip.trip_id === trip_id);
+      const { route_id } = trip;
+      const route = routes.find((route) => route.route_id === route_id);
+      const { route_long_name, route_color, route_text_color } = route;
+      const routeStyle = {
+        backgroundColor: `#${route_color}`,
+        color: `#${route_text_color}`,
+      };
+
+      return {
+        route_long_name,
+        routeStyle,
+        stop_id,
+        pickupTypeDescription,
+        dropOffTypeDescription,
+        timepointDescription,
+        departure_time,
+      };
+    });
+
+    setInformationRichStopTimes(informationRichStopTimes);
+  }, []);
 
   return (
     <>
-      <h2>Upload GTFS Files</h2>
-      <FileUpload fileStateMap={fileStateMap} />
+      <h2>Routes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Route Long Name</th>
+            <th>Route Color</th>
+          </tr>
+        </thead>
+        <tbody>
+          {routes.map((route, index) => (
+            <tr key={index}>
+              <td>{route.route_long_name}</td>
+              <td
+                style={{
+                  backgroundColor: `#${route.route_color}`,
+                  color: `#${route.route_text_color}`,
+                }}
+              >
+                {route.route_color}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h2>View Times by Stop</h2>
+      <p>Select a stop to view the scheduled leave times.</p>
+      <StopSelector
+        stops={stops}
+        selectedStopId={selectedStopId}
+        setSelectedStopId={setSelectedStopId}
+      />
 
-      {areAllFilesLoaded() ? (
-        <>
-          <h2>View Times by Stop</h2>
-          <p>Select a stop to view the scheduled leave times.</p>
-          <StopSelector
-            stops={stops}
-            selectedStopId={selectedStopId}
-            setSelectedStopId={setSelectedStopId}
-          />
-
-          {selectedStopId ? (
-            <TimesByStop
-              selectedStopId={selectedStopId}
-              routes={routes}
-              stops={stops}
-              allStopTimes={stopTimes}
-              trips={trips}
-            />
-          ) : null}
-        </>
+      {selectedStopId ? (
+        // TODO: This could be a general display component that
+        // takes a 'query' argument instead of specifically a stop_id
+        <TimesByStop
+          selectedStopId={selectedStopId}
+          informationRichStopTimes={informationRichStopTimes}
+        />
       ) : null}
     </>
   );
-
-  function areAllFilesLoaded() {
-    let filesAreLoaded = true;
-
-    fileStateMap.forEach((fileState) => {
-      if (fileState.state.length === 0) {
-        filesAreLoaded = false;
-      }
-    });
-
-    return filesAreLoaded;
-  }
 };

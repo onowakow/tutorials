@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export const StopSelector = ({ stops, selectedStopId, setSelectedStopId }) => {
   const alphabetizedStops = stops.sort((a, b) =>
@@ -16,11 +16,7 @@ export const StopSelector = ({ stops, selectedStopId, setSelectedStopId }) => {
 
   return (
     <div style={{ marginBottom: '.5rem' }}>
-      <select
-        value={selectedStopId}
-        // defaultValue=""
-        onChange={handleStopSelect}
-      >
+      <select value={selectedStopId} onChange={handleStopSelect}>
         <option value="" disabled>
           Select a stop
         </option>
