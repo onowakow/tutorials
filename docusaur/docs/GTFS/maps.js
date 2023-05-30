@@ -1,10 +1,31 @@
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import React from 'react';
+import {
+  GoogleMap,
+  Marker,
+  useLoadScript,
+  InfoWindow,
+} from '@react-google-maps/api';
+import { Polyline } from '@react-google-maps/api';
 import { useMemo } from 'react';
 
-export const Map = () => {
+export const Map = ({
+  routePolylines,
+  stops,
+  selectedStopId,
+  setSelectedStopId,
+}) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyAxIn8GmC_bsfeVQRoaCFWFVmLj49qdubs',
   });
+
+  const handleStopMarkerClick = (stop_id) => {
+    setSelectedStopId(stop_id);
+  };
+
+  const scrollToStopTimes = () => {
+    const timesByStopEl = document.getElementById('times-by-stop');
+    timesByStopEl.scrollIntoView(true);
+  };
 
   const center = useMemo(
     () => ({
@@ -14,21 +35,89 @@ export const Map = () => {
     []
   );
 
+  const mapStyles = [
+    {
+      featureType: 'all',
+      elementType: 'all',
+      stylers: [
+        {
+          saturation: -30, // Decrease saturation for subdued colors
+        },
+        {
+          lightness: 40, // Increase lightness for subdued colors
+        },
+      ],
+    },
+  ];
+
   return (
     <div
+      id="Map"
       style={{
-        height: '100vh',
-        width: '100vw',
+        height: '35rem',
+        width: '100%',
       }}
     >
       {!isLoaded ? (
-        <h1>Loading...</h1>
+        <em>Loading...</em>
       ) : (
         <GoogleMap
-          mapContainerClassName="map-container"
+          mapContainerStyle={{ height: '100%', width: '100%' }}
           center={center}
-          zoon={14}
-        />
+          zoom={14}
+          options={{
+            styles: mapStyles,
+          }}
+        >
+          {stops.map((stop) => {
+            const position = {
+              lat: Number(stop.stop_lat),
+              lng: Number(stop.stop_lon),
+            };
+
+            const displayStopInfo = stop.stop_id === selectedStopId;
+
+            return (
+              <Marker
+                key={stop.stop_id}
+                position={position}
+                icon={{
+                  url: 'https://www.geocodezip.net/mapIcons/bus_blue.png',
+                  scaledSize: new window.google.maps.Size(15, 15),
+                }}
+                onClick={() => handleStopMarkerClick(stop.stop_id)}
+              >
+                {displayStopInfo ? (
+                  <InfoWindow
+                    options={{
+                      pixelOffset: new window.google.maps.Size(0, -5),
+                    }}
+                    position={position}
+                  >
+                    <div>
+                      <h4>{stop.stop_name}</h4>
+                      <button onClick={scrollToStopTimes}>
+                        View stop times
+                      </button>
+                    </div>
+                  </InfoWindow>
+                ) : null}
+              </Marker>
+            );
+          })}
+          {routePolylines.map((routePolyline) => {
+            return (
+              <Polyline
+                key={routePolyline.route_id}
+                path={routePolyline.polyline}
+                options={{
+                  strokeColor: '#' + routePolyline.route_color,
+                  strokeWeight: 3,
+                }}
+              />
+            );
+          })}
+        </GoogleMap>
       )}
     </div>
   );

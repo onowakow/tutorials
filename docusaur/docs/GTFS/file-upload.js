@@ -68,6 +68,7 @@ const styles = {
   fileIconContainer: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 };
 

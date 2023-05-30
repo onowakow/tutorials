@@ -5,16 +5,36 @@ import { GTFSViewer } from './gtfs-viewer';
 // Stages files as they are 'uploaded' into memory. When all files are uploaded
 // render gtfs viewer
 export const GTFSViewerStaging = () => {
+  const [agency, setAgency] = useState([]);
+  const [calendar, setCalendar] = useState([]);
+  const [calendarDates, setCalendarDates] = useState([]);
+  const [feedInfo, setFeedInfo] = useState([]);
   const [routes, setRoutes] = useState([]);
+  const [shapes, setShapes] = useState([]);
   const [stops, setStops] = useState([]);
   const [stopTimes, setStopTimes] = useState([]);
   const [trips, setTrips] = useState([]);
 
   const fileStateMap = [
     {
-      name: 'stop_times.txt',
-      state: stopTimes,
-      setState: setStopTimes,
+      name: 'agency.txt',
+      state: agency,
+      setState: setAgency,
+    },
+    {
+      name: 'calendar.txt',
+      state: calendar,
+      setState: setCalendar,
+    },
+    {
+      name: 'calendar_dates.txt',
+      state: calendarDates,
+      setState: setCalendarDates,
+    },
+    {
+      name: 'feed_info.txt',
+      state: feedInfo,
+      setState: setFeedInfo,
     },
     {
       name: 'routes.txt',
@@ -22,9 +42,19 @@ export const GTFSViewerStaging = () => {
       setState: setRoutes,
     },
     {
+      name: 'shapes.txt',
+      state: shapes,
+      setState: setShapes,
+    },
+    {
       name: 'stops.txt',
       state: stops,
       setState: setStops,
+    },
+    {
+      name: 'stop_times.txt',
+      state: stopTimes,
+      setState: setStopTimes,
     },
     {
       name: 'trips.txt',
@@ -41,6 +71,7 @@ export const GTFSViewerStaging = () => {
       {areAllFilesLoaded() ? (
         <GTFSViewer
           routes={routes}
+          shapes={shapes}
           stops={stops}
           stopTimes={stopTimes}
           trips={trips}
