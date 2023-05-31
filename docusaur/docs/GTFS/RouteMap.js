@@ -8,14 +8,22 @@ import {
 import { Polyline } from '@react-google-maps/api';
 import { useMemo } from 'react';
 
-export const Map = ({
+const IS_DEV = window.location.origin == 'http://localhost:3000';
+
+// At least one key must be exposed for frontend Google Maps Javascript API to load.
+// API keys are restricted by IP/Website and by API
+const GOOGLE_MAPS_API_KEY = IS_DEV
+  ? 'AIzaSyAxIn8GmC_bsfeVQRoaCFWFVmLj49qdubs'
+  : 'AIzaSyDNooT4WjByxOzYQ06_6RqE9LHrx8b39hI';
+
+export const RouteMap = ({
   routePolylines,
   stops,
   selectedStopId,
   setSelectedStopId,
 }) => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyAxIn8GmC_bsfeVQRoaCFWFVmLj49qdubs',
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
   });
 
   const handleStopMarkerClick = (stop_id) => {

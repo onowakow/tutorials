@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-export const TimesByStop = ({ selectedStopId, informationRichStopTimes }) => {
+export const StopTimesTable = ({
+  selectedStopId,
+  informationRichStopTimes,
+}) => {
   const stopTimes = informationRichStopTimes
     .filter((stopTime) => stopTime.stop_id === selectedStopId)
     .sort((a, b) => a.departure_time.localeCompare(b.departure_time));

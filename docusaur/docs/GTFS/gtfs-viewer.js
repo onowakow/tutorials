@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { TimesByStop } from './times-by-stop';
 import { StopSelector } from './stop-selector';
-import { Map } from './maps';
+import { RouteMap } from './RouteMap';
+
+// TABLE COMPONENTS
+import { AgencyTable } from './tables/AgencyTable';
+import { CalendarTable } from './tables/CalendarTable';
+import { CalendarExceptionsTable } from './tables/CalendarExceptionsTable';
+import { RouteTable } from './tables/RouteTable';
+import { StopTimesTable } from './tables/StopTimesTable';
+
+// UTILITIES
+import { formatDate } from './utilities/formatDate';
 
 export const GTFSViewer = ({
   agency,
@@ -54,7 +63,7 @@ export const GTFSViewer = ({
       <FeedInfoTable feedInfo={feedInfo} />
       <h2>Route Map</h2>
       {routePolylines.length > 0 ? (
-        <Map
+        <RouteMap
           selectedStopId={selectedStopId}
           setSelectedStopId={setSelectedStopId}
           stops={stops}
@@ -74,7 +83,7 @@ export const GTFSViewer = ({
       {selectedStopId ? (
         // TODO: This could be a general display component that
         // takes a 'query' argument instead of specifically a stop_id
-        <TimesByStop
+        <StopTimesTable
           selectedStopId={selectedStopId}
           informationRichStopTimes={informationRichStopTimes}
         />
@@ -195,141 +204,3 @@ const FeedInfoTable = ({ feedInfo }) => {
     </table>
   );
 };
-
-const CalendarExceptionsTable = ({ calendarDates }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Exception Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        {calendarDates.map((exception) => (
-          <tr key={exception.date}>
-            <td>{formatDate(exception.date)}</td>
-            <td>
-              {exception.exception_type == 1
-                ? 'Service Added'
-                : exception.exception_type == 2
-                ? 'Service Removed'
-                : 'INVALID GTFS.'}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-const CalendarTable = ({ calendar }) => {
-  const formatServiceDay = (dayOfWeek) => {
-    if (dayOfWeek == 0) {
-      return 'No';
-    } else {
-      return 'Yes';
-    }
-  };
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Service ID</th>
-          <th>Service Start Date</th>
-          <th>Service End Date</th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-          <th>Saturday</th>
-          <th>Sunday</th>
-        </tr>
-      </thead>
-      <tbody>
-        {calendar.map((ruleset) => {
-          return (
-            <tr key={ruleset.service_id}>
-              <td>{ruleset.service_id}</td>
-              <td>{formatDate(ruleset.start_date)}</td>
-              <td>{formatDate(ruleset.end_date)}</td>
-              <td>{formatServiceDay(ruleset.monday)}</td>
-              <td>{formatServiceDay(ruleset.tuesday)}</td>
-              <td>{formatServiceDay(ruleset.wednesday)}</td>
-              <td>{formatServiceDay(ruleset.thursday)}</td>
-              <td>{formatServiceDay(ruleset.friday)}</td>
-              <td>{formatServiceDay(ruleset.saturday)}</td>
-              <td>{formatServiceDay(ruleset.sunday)}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
-};
-
-const AgencyTable = ({ agency }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>URL</th>
-          <th>Timezone</th>
-          <th>Phone</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        {agency.map((agent) => (
-          <tr key={agent.agency_id}>
-            <td>{agent.agency_name}</td>
-            <td>
-              <a href={agent.agency_url}>{agent.agency_url}</a>
-            </td>
-            <td>{agent.agency_timezone}</td>
-            <td>{agent.agency_phone}</td>
-            <td>{agent.agency_email}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-const RouteTable = ({ routes }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Route Long Name</th>
-          <th>Route Color</th>
-        </tr>
-      </thead>
-      <tbody>
-        {routes.map((route, index) => (
-          <tr key={index}>
-            <td>{route.route_long_name}</td>
-            <td
-              style={{
-                backgroundColor: `#${route.route_color}`,
-                color: `#${route.route_text_color}`,
-              }}
-            >
-              {route.route_color}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-function formatDate(date) {
-  const YYYY = date.substring(0, 4);
-  const MM = date.substring(4, 6);
-  const DD = date.substring(6, 8);
-
-  return MM + '/' + DD + '/' + YYYY;
-}
