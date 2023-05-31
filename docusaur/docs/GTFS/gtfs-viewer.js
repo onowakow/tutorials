@@ -3,7 +3,17 @@ import { TimesByStop } from './times-by-stop';
 import { StopSelector } from './stop-selector';
 import { Map } from './maps';
 
-export const GTFSViewer = ({ routes, shapes, stops, stopTimes, trips }) => {
+export const GTFSViewer = ({
+  agency,
+  calendar,
+  calendarDates,
+  feedInfo,
+  routes,
+  shapes,
+  stops,
+  stopTimes,
+  trips,
+}) => {
   const [selectedStopId, setSelectedStopId] = useState('');
   const [informationRichStopTimes, setInformationRichStopTimes] = useState([]);
   // RoutePolylines combine routes and shapes
@@ -23,30 +33,25 @@ export const GTFSViewer = ({ routes, shapes, stops, stopTimes, trips }) => {
 
   return (
     <>
-      <h2>Routes</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Route Long Name</th>
-            <th>Route Color</th>
-          </tr>
-        </thead>
-        <tbody>
-          {routes.map((route, index) => (
-            <tr key={index}>
-              <td>{route.route_long_name}</td>
-              <td
-                style={{
-                  backgroundColor: `#${route.route_color}`,
-                  color: `#${route.route_text_color}`,
-                }}
-              >
-                {route.route_color}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2>Agency (agency.txt)</h2>
+      <AgencyTable agency={agency} />
+      <h2>Routes (routes.txt)</h2>
+      <RouteTable routes={routes} />
+      <h2>Service (calendar.txt)</h2>
+      <p>
+        Shows the start and end date for a given service, along with which days
+        of the week bus service is provided. Note that the 'ServiceID' is not
+        customer-facing.
+      </p>
+      <CalendarTable calendar={calendar} />
+      <h2>Calendar Exceptions (calendar_dates.txt)</h2>
+      <CalendarExceptionsTable calendarDates={calendarDates} />
+      <h2>Feed Info</h2>
+      <p>
+        Information about the GTFS feed. Contact information should be for
+        technical support (issues with data, etc.).
+      </p>
+      <FeedInfoTable feedInfo={feedInfo} />
       <h2>Route Map</h2>
       {routePolylines.length > 0 ? (
         <Map
@@ -114,6 +119,7 @@ function createInformationRichStopTimes(stopTimes, trips, routes) {
       pickup_type,
       stop_id,
       drop_off_type,
+      stop_headsign,
       timepoint,
     } = stopTime;
 
@@ -149,9 +155,181 @@ function createInformationRichStopTimes(stopTimes, trips, routes) {
       pickupTypeDescription,
       dropOffTypeDescription,
       timepointDescription,
+      stop_headsign,
       departure_time,
     };
   });
 
   return informationRichStopTimes;
+}
+
+const FeedInfoTable = ({ feedInfo }) => {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Publisher</th>
+          <th>Publisher URL</th>
+          <th>Language</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Version</th>
+          <th>Contact Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        {feedInfo.map((feed) => (
+          <tr key={feed.feed_version}>
+            <td>{feed.feed_publisher_name}</td>
+            <td>
+              <a href={feed.feed_publisher_url}>{feed.feed_publisher_url}</a>
+            </td>
+            <td>{feed.feed_lang}</td>
+            <td>{formatDate(feed.feed_start_date)}</td>
+            <td>{formatDate(feed.feed_end_date)}</td>
+            <td>{feed.feed_version}</td>
+            <td>{feed.feed_contact_email}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+const CalendarExceptionsTable = ({ calendarDates }) => {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Exception Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {calendarDates.map((exception) => (
+          <tr key={exception.date}>
+            <td>{formatDate(exception.date)}</td>
+            <td>
+              {exception.exception_type == 1
+                ? 'Service Added'
+                : exception.exception_type == 2
+                ? 'Service Removed'
+                : 'INVALID GTFS.'}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+const CalendarTable = ({ calendar }) => {
+  const formatServiceDay = (dayOfWeek) => {
+    if (dayOfWeek == 0) {
+      return 'No';
+    } else {
+      return 'Yes';
+    }
+  };
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Service ID</th>
+          <th>Service Start Date</th>
+          <th>Service End Date</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+          <th>Saturday</th>
+          <th>Sunday</th>
+        </tr>
+      </thead>
+      <tbody>
+        {calendar.map((ruleset) => {
+          return (
+            <tr key={ruleset.service_id}>
+              <td>{ruleset.service_id}</td>
+              <td>{formatDate(ruleset.start_date)}</td>
+              <td>{formatDate(ruleset.end_date)}</td>
+              <td>{formatServiceDay(ruleset.monday)}</td>
+              <td>{formatServiceDay(ruleset.tuesday)}</td>
+              <td>{formatServiceDay(ruleset.wednesday)}</td>
+              <td>{formatServiceDay(ruleset.thursday)}</td>
+              <td>{formatServiceDay(ruleset.friday)}</td>
+              <td>{formatServiceDay(ruleset.saturday)}</td>
+              <td>{formatServiceDay(ruleset.sunday)}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+};
+
+const AgencyTable = ({ agency }) => {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>URL</th>
+          <th>Timezone</th>
+          <th>Phone</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        {agency.map((agent) => (
+          <tr key={agent.agency_id}>
+            <td>{agent.agency_name}</td>
+            <td>
+              <a href={agent.agency_url}>{agent.agency_url}</a>
+            </td>
+            <td>{agent.agency_timezone}</td>
+            <td>{agent.agency_phone}</td>
+            <td>{agent.agency_email}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+const RouteTable = ({ routes }) => {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Route Long Name</th>
+          <th>Route Color</th>
+        </tr>
+      </thead>
+      <tbody>
+        {routes.map((route, index) => (
+          <tr key={index}>
+            <td>{route.route_long_name}</td>
+            <td
+              style={{
+                backgroundColor: `#${route.route_color}`,
+                color: `#${route.route_text_color}`,
+              }}
+            >
+              {route.route_color}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+function formatDate(date) {
+  const YYYY = date.substring(0, 4);
+  const MM = date.substring(4, 6);
+  const DD = date.substring(6, 8);
+
+  return MM + '/' + DD + '/' + YYYY;
 }

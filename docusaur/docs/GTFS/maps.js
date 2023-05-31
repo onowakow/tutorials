@@ -41,10 +41,10 @@ export const Map = ({
       elementType: 'all',
       stylers: [
         {
-          saturation: -30, // Decrease saturation for subdued colors
+          saturation: -60, // Decrease saturation for subdued colors
         },
         {
-          lightness: 40, // Increase lightness for subdued colors
+          lightness: 10, // Increase lightness for subdued colors
         },
       ],
     },

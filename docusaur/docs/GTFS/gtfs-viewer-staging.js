@@ -70,6 +70,10 @@ export const GTFSViewerStaging = () => {
 
       {areAllFilesLoaded() ? (
         <GTFSViewer
+          agency={agency}
+          calendar={calendar}
+          calendarDates={calendarDates}
+          feedInfo={feedInfo}
           routes={routes}
           shapes={shapes}
           stops={stops}

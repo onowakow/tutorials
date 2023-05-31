@@ -17,6 +17,7 @@ export const TimesByStop = ({ selectedStopId, informationRichStopTimes }) => {
               <th>Departure Time</th>
               <th>Pickup type</th>
               <th>Drop off type</th>
+              <th>Stop Headsign</th>
               <th>Timepoint</th>
               <th>Route</th>
             </tr>
@@ -27,6 +28,7 @@ export const TimesByStop = ({ selectedStopId, informationRichStopTimes }) => {
                 <td>{stopTime.departure_time}</td>
                 <td>{stopTime.pickupTypeDescription}</td>
                 <td>{stopTime.dropOffTypeDescription}</td>
+                <td>{stopTime.stop_headsign}</td>
                 <td>{stopTime.timepointDescription}</td>
                 <td style={stopTime.routeStyle}>{stopTime.route_long_name}</td>
               </tr>
