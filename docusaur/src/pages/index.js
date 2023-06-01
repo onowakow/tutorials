@@ -8,33 +8,55 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import styles from './index.module.css';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
-        </div>
+        <h1 className="hero__title">Hi, I'm Owen!</h1>
       </div>
     </header>
   );
 }
 
 export default function Home() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
+      title={`Hi, I'm ${siteConfig.title}`}
+      description="Description will go into a meta tag in <head />"
+    >
+      <div style={{ maxWidth: 800 }} className="container">
+        <div
+          style={{ justifyContent: 'center', marginTop: '3rem' }}
+          className="row"
+        >
+          <h1>Hi, I'm Owen!</h1>
+        </div>
+        <div
+          style={{ justifyContent: 'center', marginTop: '3rem' }}
+          className="row"
+        >
+          <p className="welcome-section text--center">
+            I'm a full stack developer living in Wyoming. I like to{' '}
+            <a href="/blog">blog</a> about web development from my professional
+            and personal projects.
+          </p>
+          <p className="welcome-section  text--center">
+            My most recent project is using the General Transit Feed
+            Specification (GTFS) to publish University of Wyoming's transit data
+            to Google Maps. Check it out at{' '}
+            <a href="/docs/GTFS/introduction">/docs/GTFS/introduction</a>
+          </p>
+          <p className="welcome-section  text--center">
+            My current contract work is as an <b>Angular Developer</b> and{' '}
+            <b>Azure Cloud Engineer</b>. I'm open to work, and feel free to
+            reach out over{' '}
+            <a href="https://www.linkedin.com/in/owen-nowakowski/">LinkedIn</a>.
+          </p>
+        </div>
+      </div>
       <main>
-        <HomepageFeatures />
+        <section></section>
       </main>
     </Layout>
   );
