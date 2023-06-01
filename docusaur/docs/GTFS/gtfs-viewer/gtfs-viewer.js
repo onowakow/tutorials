@@ -84,6 +84,7 @@ export const GTFSViewer = ({
         // TODO: This could be a general display component that
         // takes a 'query' argument instead of specifically a stop_id
         <StopTimesTable
+          stops={stops}
           selectedStopId={selectedStopId}
           informationRichStopTimes={informationRichStopTimes}
         />

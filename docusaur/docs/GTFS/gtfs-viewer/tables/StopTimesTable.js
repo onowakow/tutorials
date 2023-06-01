@@ -1,11 +1,34 @@
 import React from 'react';
 
 export const StopTimesTable = ({
+  stops,
   selectedStopId,
   informationRichStopTimes,
 }) => {
+  const getStopFilter = (stops, selectedStopId) => {
+    let stopsFilter = () => {};
+
+    const selectedStop = stops.find((stop) => stop.stop_id === selectedStopId);
+    const selectedStopIsStation = Number(selectedStop.location_type) === 1;
+
+    if (selectedStopIsStation) {
+      const stopsAtStation = stops.filter(
+        (stop) => stop.parent_station === selectedStopId
+      );
+
+      stopsFilter = (stopTime) =>
+        stopsAtStation.findIndex(
+          (stop) => stop.stop_id === stopTime.stop_id
+        ) !== -1;
+    } else {
+      stopsFilter = (stopTime) => stopTime.stop_id === selectedStopId;
+    }
+
+    return stopsFilter;
+  };
+
   const stopTimes = informationRichStopTimes
-    .filter((stopTime) => stopTime.stop_id === selectedStopId)
+    .filter(getStopFilter(stops, selectedStopId))
     .sort((a, b) => a.departure_time.localeCompare(b.departure_time));
 
   return (

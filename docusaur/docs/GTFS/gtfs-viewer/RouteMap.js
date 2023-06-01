@@ -82,8 +82,11 @@ export const RouteMap = ({
               lat: Number(stop.stop_lat),
               lng: Number(stop.stop_lon),
             };
-
+            const is_station = Number(stop.location_type) === 1;
             const displayStopInfo = stop.stop_id === selectedStopId;
+
+            const icon_size = new window.google.maps.Size(15, 15);
+            const hidden_icon_size = new window.google.maps.Size(0, 0);
 
             return (
               <Marker
@@ -91,7 +94,8 @@ export const RouteMap = ({
                 position={position}
                 icon={{
                   url: 'https://www.geocodezip.net/mapIcons/bus_blue.png',
-                  scaledSize: new window.google.maps.Size(15, 15),
+                  // Hide stations, but allow InfoWindow to show.
+                  scaledSize: is_station ? hidden_icon_size : icon_size,
                 }}
                 onClick={() => handleStopMarkerClick(stop.stop_id)}
               >

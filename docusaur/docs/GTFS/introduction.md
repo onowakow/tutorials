@@ -17,3 +17,8 @@ Check out the following resources for more information and docs about GTFS.
 - [GTFS Reference](https://developers.google.com/transit/gtfs/reference)
 
 - [Example GTFS Feed](https://developers.google.com/transit/gtfs/examples/gtfs-feed)
+
+### MobilityData
+
+- [GTFS Best Practices](https://gtfs.org/schedule/best-practices/)
+  - Helpful for naming conventions among other things.
