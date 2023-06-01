@@ -8,7 +8,7 @@ import {
 import { Polyline } from '@react-google-maps/api';
 import { useMemo } from 'react';
 
-const IS_DEV = window.location.origin == 'http://localhost:3000';
+const IS_DEV = process.env.NODE_ENV == 'development';
 
 // At least one key must be exposed for frontend Google Maps Javascript API to load.
 // API keys are restricted by IP/Website and by API
