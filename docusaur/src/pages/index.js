@@ -33,7 +33,7 @@ export default function Home() {
           <h1>Hi, I'm Owen!</h1>
         </div>
         <div
-          style={{ justifyContent: 'center', marginTop: '3rem' }}
+          style={{ justifyContent: 'center', marginTop: '2rem' }}
           className="row"
         >
           <p className="welcome-section text--center">
