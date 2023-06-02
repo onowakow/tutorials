@@ -2,21 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { StopSelector } from './stop-selector';
 import { RouteMap } from './RouteMap';
 
-// TABLE COMPONENTS
-import { AgencyTable } from './tables/AgencyTable';
-import { CalendarTable } from './tables/CalendarTable';
-import { CalendarExceptionsTable } from './tables/CalendarExceptionsTable';
-import { RouteTable } from './tables/RouteTable';
 import { StopTimesTable } from './tables/StopTimesTable';
 
-// UTILITIES
-import { formatDate } from './utilities/formatDate';
-
-export const GTFSViewer = ({
-  agency,
-  calendar,
-  calendarDates,
-  feedInfo,
+// TODO: Working on organizing these components. Hence the strange combo of functions
+export const RouteAndStopTimesViewer = ({
   routes,
   shapes,
   stops,
@@ -42,25 +31,6 @@ export const GTFSViewer = ({
 
   return (
     <>
-      <h2>Agency (agency.txt)</h2>
-      <AgencyTable agency={agency} />
-      <h2>Routes (routes.txt)</h2>
-      <RouteTable routes={routes} />
-      <h2>Service (calendar.txt)</h2>
-      <p>
-        Shows the start and end date for a given service, along with which days
-        of the week bus service is provided. Note that the 'ServiceID' is not
-        customer-facing.
-      </p>
-      <CalendarTable calendar={calendar} />
-      <h2>Calendar Exceptions (calendar_dates.txt)</h2>
-      <CalendarExceptionsTable calendarDates={calendarDates} />
-      <h2>Feed Info</h2>
-      <p>
-        Information about the GTFS feed. Contact information should be for
-        technical support (issues with data, etc.).
-      </p>
-      <FeedInfoTable feedInfo={feedInfo} />
       <h2>Route Map</h2>
       {routePolylines.length > 0 ? (
         <RouteMap
@@ -172,36 +142,3 @@ function createInformationRichStopTimes(stopTimes, trips, routes) {
 
   return informationRichStopTimes;
 }
-
-const FeedInfoTable = ({ feedInfo }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Publisher</th>
-          <th>Publisher URL</th>
-          <th>Language</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Version</th>
-          <th>Contact Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        {feedInfo.map((feed) => (
-          <tr key={feed.feed_version}>
-            <td>{feed.feed_publisher_name}</td>
-            <td>
-              <a href={feed.feed_publisher_url}>{feed.feed_publisher_url}</a>
-            </td>
-            <td>{feed.feed_lang}</td>
-            <td>{formatDate(feed.feed_start_date)}</td>
-            <td>{formatDate(feed.feed_end_date)}</td>
-            <td>{feed.feed_version}</td>
-            <td>{feed.feed_contact_email}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
