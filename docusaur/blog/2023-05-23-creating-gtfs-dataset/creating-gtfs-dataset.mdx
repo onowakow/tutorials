@@ -94,7 +94,9 @@ More symbols could be added, but these few allowed for the layers of information
 
 I chose to use Python to create the GTFS feed. I used a Jupyter Notebook for quick development and integrated documentation.
 
-### From this:
+The main purpose of the Python script is to convert formatted timetables to the CSV files required by the GTFS. The below tables demonstrates the transition from timetable to stop_times and trips. The tables are simplified versions of the files required by GTFS. Notice how each timetable row gets a row in **trips.txt** and each cell gets a row in **stop_times.txt**
+
+### Python script input (simplified)
 
 **link_timetable.csv**
 
@@ -126,7 +128,7 @@ I chose to use Python to create the GTFS feed. I used a Jupyter Notebook for qui
   </tbody>
 </table>
 
-### To this:
+### Python script output (simplified)
 
 <div className="container">
   <div className="row">
@@ -205,4 +207,24 @@ I chose to use Python to create the GTFS feed. I used a Jupyter Notebook for qui
   </div>
 </div>
 
-**stop_times.txt**
+### Other tasks
+
+Beyond creating **stop_times.txt** and **trips.txt**, the Python script also handles:
+
+1. Importing all necessary data files (**stops.xlsx**, **routes.xlsx**, **agency.xlsx**, etc.), processing data if necessary, and exporting them as **.txt** files.
+
+2. Generate **shapes.txt** using Google Maps Directions API. **shapes.txt** is used to display a colored line for a given route on Google Maps. Directions API returns an encoded polyline which must be decoded. Luckily, there is a Python package for this.
+
+## Creating a React App for Viewing and Verifying GTFS
+
+The React App I built can be found on this site at the [GTFS Viewer](/docs/GTFS/gtfs-viewer). If you don't have a GTFS feed, look at the screenshots below from the GTFS Viewer. For the app, I used MDX, the combination of markdown and JSX that allows for directly using React components in markdown files.
+
+### Viewing route shapes and stop locations
+
+![Google Maps API shows a map of Laramie, WY with two routes and several stops represented as blue buses](./media/react-app-gtfs-google-map.png)
+
+### Viewing stop times by stop
+
+![Table shows stop times with each row showing departure time, pickup and drop off info, stop headsing, and more](./media/react-app-stop-times-table.png)
+
+This app ended up being helpful not only for viewing and verifying data, but also showing the transit agency their data in a way that is easy to visualize.
