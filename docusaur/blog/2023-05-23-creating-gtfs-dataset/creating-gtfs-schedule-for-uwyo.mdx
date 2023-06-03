@@ -1,17 +1,24 @@
 ---
-slug: creating-gtfs-dataset
+slug: creating-gtfs-schedule-for-uwyo
 # title: Deploy Docusaurus to Static Web App
 authors: [nowakowski]
-tags: [GTFS, transit, Python, Jupyter Notebook, Data Engineering]
+tags: [GTFS, transit, Python, Jupyter Notebook, Data Engineering, React, MDX]
 ---
 
-# Creating a GTFS Dataset
+# How I Published University of Wyoming's Transit Data to Google Maps
 
-I spent the past couple of weeks developing a GTFS dataset for University of Wyoming to publish their transit data on Google Maps. This post is a brief overview of the project, and more detailed information can be found in the **Projects** tab of this blog, or at [Introduction to the General Transit Feed Specification](/docs/GTFS/introduction).
+Fixed route transit agencies typically have timetables defining the daily schedule of their buses. To make route information available of Google Maps, transit agencies must conform their data to the General Transit Feed Specification (GTFS).
+
+I created a GTFS schedule for University of Wyoming's bus service using:
+
+1.  **Python** for data engineering and
+2.  **React** for visualization
+
+This post is a brief overview of the project, and more detailed information will be soon available in the **Projects** tab of this blog, or at [Introduction to the General Transit Feed Specification](/docs/general-transit-feed-specification/introduction).
 
 ## Motivation
 
-With this new blog, I needed some projects to write about. Being a bus driver for UWYO, publishing their data to Google Maps is something I've been wanting to do for a while. In fact, last year I spent months developing an awesome full-stack web app for creating and publishing route timetables called _SmallTown Transit_.
+With this new blog, I needed some projects to write about. Being a bus driver for University of Wyoming, publishing their data to Google Maps is something I've been wanting to do for a while. In fact, last year I spent months developing an awesome full-stack web app for creating and publishing route timetables called _SmallTown Transit_.
 
 The app ended up being a never-ending project and was a huge lesson in Agile development (Check out the [Agile Manifesto](https://agilemanifesto.org/) if you are unfamiliar with Agile).
 
@@ -61,7 +68,7 @@ These provided timetables are great for human readability as well as recalculati
       <td>06:35:00</td>
       <td>06:39:00</td>
       <td>
-        06:40:00<b>?</b>
+        06:40:00<b>!</b>
       </td>
       <td>...</td>
     </tr>
@@ -70,7 +77,7 @@ These provided timetables are great for human readability as well as recalculati
       <td>06:55:00</td>
       <td>06:59:00</td>
       <td>
-        06:40:00<b>?</b>
+        06:40:00<b>!</b>
       </td>
       <td>...</td>
     </tr>
@@ -207,7 +214,7 @@ The main purpose of the Python script is to convert formatted timetables to the 
   </div>
 </div>
 
-### Other tasks
+### Python script other tasks
 
 Beyond creating **stop_times.txt** and **trips.txt**, the Python script also handles:
 
@@ -217,7 +224,7 @@ Beyond creating **stop_times.txt** and **trips.txt**, the Python script also han
 
 ## Creating a React App for Viewing and Verifying GTFS
 
-The React App I built can be found on this site at the [GTFS Viewer](/docs/GTFS/gtfs-viewer). If you don't have a GTFS feed, look at the screenshots below from the GTFS Viewer. For the app, I used MDX, the combination of markdown and JSX that allows for directly using React components in markdown files.
+The React App I built can be found on this site at the [GTFS Viewer](/docs/general-transit-feed-specification/gtfs-viewer). If you don't have a GTFS feed, look at the screenshots below from the GTFS Viewer. For the app, I used MDX, the combination of markdown and JSX that allows for directly using React components in markdown files.
 
 ### Viewing route shapes and stop locations
 
@@ -228,3 +235,9 @@ The React App I built can be found on this site at the [GTFS Viewer](/docs/GTFS/
 ![Table shows stop times with each row showing departure time, pickup and drop off info, stop headsing, and more](./media/react-app-stop-times-table.png)
 
 This app ended up being helpful not only for viewing and verifying data, but also showing the transit agency their data in a way that is easy to visualize.
+
+## Final Thoughts
+
+I enjoyed building this project. My department is still in the process of applying to be a Google Transit Partner, but before long, this data should be visible on Google Maps.
+
+Thanks for stopping by, and watch out for more posts soon!

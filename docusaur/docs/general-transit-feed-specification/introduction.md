@@ -2,9 +2,15 @@
 sidebar_position: 0
 ---
 
-# Introduction to the General Transit Feed Specification
+# Introduction
 
 The General Transit Feed Specification (GTFS) is a standardize format for sharing transit data. The feed splits route information into CSV files (stored as _.txt_) like **routes.txt**, **stops.txt**, and **stop_times.txt**.
+
+:::info
+
+These project docs are a work in progress. See my blog post [Creating a GTFS Dataset](http://localhost:3000/blog/creating-gtfs-schedule-for-uwyo) for an overview of the project.
+
+:::
 
 ## Helpful Resources
 

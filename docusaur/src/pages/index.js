@@ -1,9 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
 import styles from './index.module.css';
 
@@ -45,7 +43,10 @@ export default function Home() {
             My most recent project is using the General Transit Feed
             Specification (GTFS) to publish University of Wyoming's transit data
             to Google Maps. Check it out at{' '}
-            <a href="/docs/GTFS/introduction">/docs/GTFS/introduction</a>
+            <a href="/blog/creating-gtfs-schedule-for-uwyo.mdx">
+              How I Published University of Wyoming's Transit Data to Google
+              Maps
+            </a>
           </p>
           <p className="welcome-section  text--center">
             My current contract work is as an <b>Angular Developer</b> and{' '}

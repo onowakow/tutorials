@@ -1,0 +1,8 @@
+{
+  "label": "General Transit Feed Specification",
+  "position": 0,
+  "link": {
+    "type": "generated-index",
+    "description": "Creating and viewing the transit data in the General Transit Feed Specification (GTFS)"
+  }
+}

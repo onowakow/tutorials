@@ -124,7 +124,7 @@ export const RouteMap = ({
                 path={routePolyline.polyline}
                 options={{
                   strokeColor: '#' + routePolyline.route_color,
-                  strokeWeight: 3,
+                  strokeWeight: 4,
                 }}
               />
             );
