@@ -4,15 +4,12 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  workingDir: $(Build.ArtifactStagingDirectory)
+  workingDir: $(System.DefaultWorkingDirectory)
   docusaurDir: docusaur
   blogDir: blog
   docsDir: docs
 
 steps:
-  - script: ls $(workingDir)
-    verbose: true
-    displayName: 'Check contents of workingDir'
   - script: |
       find $(workingDir)/$(docusaurDir) -type f -name 'DRAFT*' -exec rm {} +
       find $(workingDir)/$(docusaurDir) -type d -name 'DRAFT*' -exec rmdir {} +
