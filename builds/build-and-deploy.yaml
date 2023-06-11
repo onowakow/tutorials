@@ -10,6 +10,8 @@ variables:
   docsDir: docs
 
 steps:
+  - script: ls $(workingDir)
+    displayName: 'Check contents of workingDir'
   - script: |
       find $(workingDir)/$(docusaurDir) -type f -name 'DRAFT*' -exec rm {} +
       find $(workingDir)/$(docusaurDir) -type d -name 'DRAFT*' -exec rmdir {} +
