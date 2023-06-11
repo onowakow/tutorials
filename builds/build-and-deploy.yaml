@@ -4,19 +4,17 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  workingDir: $(System.DefaultWorkingDirectory)
-  docusaurDir: docusaur
-  blogDir: blog
-  docsDir: docs
+  sourceDirectory: $(System.DefaultWorkingDirectory)
+  docusaurDirectory: docusaur
 
 steps:
   - script: |
-      find $(workingDir)/$(docusaurDir) -type f -name 'DRAFT*' -exec rm {} +
-      find $(workingDir)/$(docusaurDir) -type d -name 'DRAFT*' -exec rmdir {} +
+      find $(sourceDirectory)/$(docusaurDirectory) -type d -name 'DRAFT*' -exec rm -r {} +
     displayName: 'Remove draft files and directories.'
+
   - task: AzureStaticWebApp@0
     inputs:
-      app_location: docusaur
+      app_location: $(docusaurDirectory)
       app_build_command: npm run build
       output_location: build
     env:
