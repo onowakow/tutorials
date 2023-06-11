@@ -11,6 +11,7 @@ variables:
 
 steps:
   - script: ls $(workingDir)
+    verbose: true
     displayName: 'Check contents of workingDir'
   - script: |
       find $(workingDir)/$(docusaurDir) -type f -name 'DRAFT*' -exec rm {} +
