@@ -19,7 +19,7 @@ Docusaurus documents and blog posts can either be stored in the root document pa
 
 This blog is built and deployed using an Azure DevOps Pipeline written in YAML. Some configure Azure to deploy to Static Web App upon pushing a build to a remote repo. Here's what my pipeline looked like before implementing the drafting abilities:
 
-**build-and-deploy.yaml**
+**build-and-deploy.yaml (before draft support)**
 
 ```yml
 trigger: none

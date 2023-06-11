@@ -9,7 +9,7 @@ variables:
 
 steps:
   - script: |
-      find $(sourceDirectory)/$(docusaurDirectory) \(-type f -o -type d\) -name 'DRAFT*' -exec rm -rf {} +
+      find $(sourceDirectory)/$(docusaurDirectory) -type f,d -name 'DRAFT*' -exec rm -rf {} +
     displayName: 'Remove draft files and directories.'
 
   - task: AzureStaticWebApp@0
