@@ -3,7 +3,17 @@ trigger: none
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  workingDir: Build.ArtifactStagingDirectory
+  docusaurDir: docusaur
+  blogDir: blog
+  docsDir: docs
+
 steps:
+  - script: |
+      find $(workingDir)/$(docusaurDir) -type f -name 'DRAFT*' -exec rm {} +
+      find $(workingDir)/$(docusaurDir) -type d -name 'DRAFT*' -exec rmdir {} +
+    displayName: 'Remove draft files and directories.'
   - task: AzureStaticWebApp@0
     inputs:
       app_location: docusaur
