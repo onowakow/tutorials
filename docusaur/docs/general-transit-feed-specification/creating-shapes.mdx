@@ -56,7 +56,7 @@ all_waypoints = [
 ]
 ```
 
-The final thing to note is that Directions API expects an origin, a destination, and the in-between waypoints. I sliced the `all_waypoints` list into these three parameters and assigned them to their route.
+The final thing to note is that the Directions API expects an origin, a destination, and the in-between waypoints. I sliced the `all_waypoints` list into these three parameters and assigned them to their route.
 
 ```python
 route.first_stop = route.all_waypoints[0]
@@ -78,7 +78,7 @@ Here are a few helpful resources:
 
 Creating the polyline has three main steps:
 
-1. Call the Directions API. I stored the Google Maps API Key as an environmental variable. Storing the API key in your source code is unwise unless you have adequate restrictions on the use of the key.
+1. **Call the Directions API.** I stored the Google Maps API Key as an environmental variable. Storing the API key in your source code is unwise unless you have adequate restrictions on the use of the key.
 
    ```python
    import googlemaps
@@ -94,7 +94,7 @@ Creating the polyline has three main steps:
    )
    ```
 
-2. Decode encoded polyline. I used this [Polyline Decoder library](https://pypi.org/project/polyline/). Note that the client returns an array of directions. This is because the API can be configured to return multiple direction options.
+2. **Decode encoded polyline.** I used this [Polyline Decoder library](https://pypi.org/project/polyline/). Note that the client returns an array of directions. This is because the API can be configured to return multiple direction options.
 
    ```python
    import polyline
@@ -104,7 +104,7 @@ Creating the polyline has three main steps:
    shape = polyline.decode(directions_polyline)
    ```
 
-3. Create a latitude-longitude polyline
+3. **Create a latitude-longitude polyline.** I mapped each point tuple to a dictionary. This helped document the tuple's meaning in later steps.
 
    ```python
    latLngPolyline = []
@@ -148,3 +148,9 @@ df.to_csv(path, index=False)
 ```
 
 ## Final thoughts
+
+Overall, this method for generating `shapes.txt` works well. As expected, the path returned by the Directions API doesn't perfectly match the route. Buses take considerations to reduce dangerous turns and tight roads, and the Directions API doesn't necessarily make these same considerations.
+
+A future script would allow for additional waypoints to be added to influence the Directions API. I will wait until this need is demonstrated.
+
+Thanks for taking the time to read this article, and I hope it was helpful!
