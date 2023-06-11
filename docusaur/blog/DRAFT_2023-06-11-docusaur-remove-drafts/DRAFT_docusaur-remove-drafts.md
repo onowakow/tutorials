@@ -45,18 +45,17 @@ The `AzureStaticWebApp@0` task runs relative to the virtual machine's default wo
 
 `System.DefaultWorkingDirectory` is the path of the source code copy. We can remove folders and files within the virtual machine's default working directory to prevent from being published to the Static Web App. Removing these files, of course, has no effect on our source code, so we can run a recursive delete command (`rm -r`) without much fear.
 
-To remove folders and files starting with `DRAFT`, we can add the following script to the pipeline:
+To remove folders and files starting with `DRAFT`, we can add the following script to the pipeline. Please read on to understand the parts before implementing the script. **`rm -rf` is dangerous and may result in file loss.**:
 
 **build-and-deploy.yaml (excerpt)**
 
 ```yml
 - script: |
-    find $(sourceDirectory)/$(docusaurDirectory) -type f -name 'DRAFT*' -exec rm {} +
-    find $(sourceDirectory)/$(docusaurDirectory) -type d -name 'DRAFT*' -exec rmdir {} +
+    find $(sourceDirectory)/$(docusaurDirectory) -type f -name 'DRAFT*' -exec rm -rf {} +
   displayName: 'Remove draft files and directories.'
 ```
 
-You'll notice there are two very similar scripts. Let's break them down.
+Let's break down the script.
 
 - `find $(System.DefaultWorkingDirectory)/$(docusaurDirectory)`: "find" is a bash command for recursively searching for files. The path "$(System.DefaultWorkingDirectory)" is the root of the copies repo, while "/$(docusaurDirectory)" is the root of my Docusaurus project. This path may vary based on how your project is set up.
 
@@ -64,9 +63,11 @@ You'll notice there are two very similar scripts. Let's break them down.
 
 - `-name 'DRAFT*'`: Find files that start with `DRAFT`. You could also use `DRAFT_*` if you want the underscore to be significant.
 
-- `-exec rm {} +`: As files or directories are found, execute the `rm` command (the current file is represented by the placeholder `{}`). `+` signifies the end of the `-exec` command.
+- `-exec rm {} +`:
 
-- `exec rm -r {} +`: Like above, but `rm -r` will recursively remove folders
+- `exec <command> {} +`: As files or directories are found, execute `<command>` on the current file, represented by the placeholder `{}`. `+` signifies the end of the `-exec` command.
+
+- `rm -rf`: This portion of the script **should be considered dangerous!**
 
 **Likewise for finding and removing directories, we can use the following bash command**:
 
