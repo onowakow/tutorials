@@ -4,7 +4,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  workingDir: Build.ArtifactStagingDirectory
+  workingDir: $(Build.ArtifactStagingDirectory)
   docusaurDir: docusaur
   blogDir: blog
   docsDir: docs
