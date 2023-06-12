@@ -111,6 +111,10 @@ steps:
       azure_static_web_apps_api_token: $(swa_deployment_token)
 ```
 
+## Publishing drafts
+
+To publish drafts, simply remove the `DRAFT` prefix and run the pipeline.
+
 ## Limitations
 
 This method is quick and easy, but it has a few limitations.
